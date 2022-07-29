@@ -1,0 +1,40 @@
+{
+  "name": "physical-simulator",
+  "version": "1.0.0-beta.1",
+  "description": "",
+  "main": "src/index.ts",
+  "browser": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.prod.js",
+    "start": "webpack serve --config webpack.config.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://chenyunfei@gerrit.zhenguanyu.com:29418/ada-hardware-helper"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "7.18.9",
+    "@babel/core": "7.18.9",
+    "@babel/plugin-transform-typescript": "7.18.8",
+    "@babel/preset-env": "7.18.9",
+    "@babel/preset-typescript": "7.18.6",
+    "@types/three": "0.142.0",
+    "babel-loader": "8.2.5",
+    "file-loader": "6.2.0",
+    "html-webpack-plugin": "5.5.0",
+    "url-loader": "^4.1.1",
+    "webpack": "5.73.0",
+    "webpack-cli": "4.10.0",
+    "webpack-dev-server": "4.9.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "7.12.1",
+    "cannon": "0.6.2",
+    "core-js": "3.23.5",
+    "three": "0.142.0"
+  }
+}
