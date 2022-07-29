@@ -10,5 +10,5 @@ npm run start
 ### visit local service
 http://localhost:3006
 
-### visit github online sit
+### visit github online site
 https://bfjacky.github.io/dice-toller/
