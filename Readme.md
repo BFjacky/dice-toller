@@ -1,10 +1,11 @@
-# 使用 Three.js 实现一个小骰子
+# Dice Toller
+> Use three and cannon implement a little dice
 
-### 安装依赖
+### Install depdencies
 npm install 
 
-### 启动
+### start local service
 npm run start
 
-### 访问
+### visit local service
 http://localhost:3006
