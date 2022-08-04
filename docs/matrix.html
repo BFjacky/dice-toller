@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin="anonymous" integrity="sha384-iZsEdQFxjZXMEJXbMmLFgTxAXLIhscrTeHOe466nX1siiBSQreDzjxh1VJDWBjya"
+        src="https://lib.baomitu.com/gl-matrix/2.8.1/gl-matrix.js"></script>
+    <!-- <script crossorigin="anonymous" integrity="sha384-iZsEdQFxjZXMEJXbMmLFgTxAXLIhscrTeHOe466nX1siiBSQreDzjxh1VJDWBjya" src="https://lib.baomitu.com/gl-matrix/2.8.1/gl-matrix-min.js"></script> -->
+    <style>
+        body {
+            margin: 0px;
+        }
+
+        .box {
+            left: 200px;
+            top: 200px;
+            position: fixed;
+            background-color: blanchedalmond;
+            border: 1px solid salmon;
+            width: 200px;
+            height: 100px;
+        }
+
+
+        .transform {
+            transform: translate(50px, 0px) rotate(45deg) scale(2, 1);
+            opacity: 0.5;
+            background: red;
+        }
+
+        .pointA {
+            position: absolute;
+            left: -25px;
+            top: -25px;
+        }
+
+        .pointB {
+            position: absolute;
+            right: -25px;
+            top: -25px;
+        }
+
+        .pointC {
+            position: absolute;
+            right: -25px;
+            bottom: -25px;
+        }
+
+        .pointD {
+            position: absolute;
+            left: -25px;
+            bottom: -25px;
+        }
+
+        .pointP {
+            position: absolute;
+            left: 100px;
+            top: 40px;
+        }
+
+        .circle {
+            background: rgb(69, 59, 1);
+            color: white;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <span class="pointA">A</span>
+        <span class="pointB">B</span>
+        <span class="pointC">C</span>
+        <span class="pointD">D</span>
+        <span class="pointP">P</span>
+    </div>
+    <div class="box transform">
+        <span class="pointA">A</span>
+        <span class="pointB">B</span>
+        <span class="pointC">C</span>
+        <span class="pointD">D</span>
+        <span class="pointP">P</span>
+    </div>
+
+    <div id="circlePointA" class="circle">A</div>
+    <div id="circlePointB" class="circle">B</div>
+    <div id="circlePointC" class="circle">C</div>
+    <div id="circlePointD" class="circle">D</div>
+
+    <script>
+        function calculatePosition() {
+            // 已知条件 中心点位置为 (300, 250) ,宽度为 200, 高度为 100 的矩形, 发生如下变换: 先发生平移(50,0), 然后发生旋转(45deg), 最后发生缩放(2,1)
+            const activeCenterPosition = [300, 250] // 中心点位置
+            const width = 200 // 宽度
+            const height = 100 // 高度
+            const transitionDelta = [50, 0]
+            const radianDelta = -Math.PI * 0.25 // 瞬时针旋转 45 度转变为弧度变化为 -Math.PI * 0.25
+            const scaleDelta = [2, 1]
+
+            const newActiveCenterPosition = [activeCenterPosition[0] + transitionDelta[0], activeCenterPosition[1] + transitionDelta[1]] // 发生平移
+            const newWidth = width * scaleDelta[0] // 缩放后的宽度
+            const newHeight = height * scaleDelta[1] // 缩放后的高度
+
+            // 然后我们首先计算 A、B、C、D 四个点相对于 P 点的坐标位置, 接下来要计算 A、B、C、D 四个点与 X 轴正方向的夹角
+            const pointARadian = Math.atan2(newHeight * 0.5, -newWidth * 0.5) // 发生旋转之前 A 点与 X 轴的夹角(弧度)
+            const pointBRadian = Math.atan2(newHeight * 0.5, newWidth * 0.5) // 发生旋转之前 B 点与 X 轴的夹角(弧度)
+            const pointCRadian = Math.atan2(-newHeight * 0.5, newWidth * 0.5) // 发生旋转之前 C 点与 X 轴的夹角(弧度)
+            const pointDRadian = Math.atan2(-newHeight * 0.5, -newWidth * 0.5) // 发生旋转之前 D 点与 X 轴的夹角(弧度)
+
+            const newPointARadian = pointARadian + radianDelta  // 旋转后的点 A 弧度
+            const newPointBRadian = pointBRadian + radianDelta  // 旋转后的点 B 弧度
+            const newPointCRadian = pointCRadian + radianDelta  // 旋转后的点 C 弧度
+            const newPointDRadian = pointDRadian + radianDelta  // 旋转后的点 D 弧度
+
+            // 利用小学一年级都会勾股定理,计算出各点到中心的距离...
+            const distanceA2P = distanceB2P = distanceC2P = distanceD2P = Math.sqrt(Math.pow(newHeight * 0.5, 2) + Math.pow(newWidth * 0.5, 2))
+
+            // 接下来就可以计算出点 A、B、C、D 相对于中心点 P 的位置了
+            const pointARelativeP = [distanceA2P * Math.cos(newPointARadian), distanceA2P * Math.sin(newPointARadian)]
+            const pointBRelativeP = [distanceB2P * Math.cos(newPointBRadian), distanceB2P * Math.sin(newPointBRadian)]
+            const pointCRelativeP = [distanceC2P * Math.cos(newPointCRadian), distanceC2P * Math.sin(newPointCRadian)]
+            const pointDRelativeP = [distanceD2P * Math.cos(newPointDRadian), distanceD2P * Math.sin(newPointDRadian)]
+
+            // 把 P 点的平移量加上,就得到了 A、B、C、D 相对于页面左上角原点的位置了 
+            const pointAPosition = [pointARelativeP[0] + newActiveCenterPosition[0], -pointARelativeP[1] + newActiveCenterPosition[1]]
+            const pointBPosition = [pointBRelativeP[0] + newActiveCenterPosition[0], -pointBRelativeP[1] + newActiveCenterPosition[1]]
+            const pointCPosition = [pointCRelativeP[0] + newActiveCenterPosition[0], -pointCRelativeP[1] + newActiveCenterPosition[1]]
+            const pointDPosition = [pointDRelativeP[0] + newActiveCenterPosition[0], -pointDRelativeP[1] + newActiveCenterPosition[1]]
+            return [pointAPosition, pointBPosition, pointCPosition, pointDPosition]
+        }
+
+        function calculatePosition_matrix() {
+            const matrixUtil = {
+                createTranslateMatrix(deltaX, deltaY) {
+                    return mat3.fromValues(1, 0, 0, 0, 1, 0, deltaX, deltaY, 1)
+                },
+                createRotationMatrix(θ) {
+                    const cos = Math.cos
+                    const sin = Math.sin
+                    return mat3.fromValues(cos(θ), sin(θ), 0, -sin(θ), cos(θ), 0, 0, 0, 1)
+                },
+                createScaleMatrix(scaleX, scaleY) {
+                    return mat3.fromValues(scaleX, 0, 0, 0, scaleY, 0, 0, 0, 1)
+                },
+                multiply(left, right) {
+                    return mat3.multiply(mat3.create(), left, right)
+                },
+                multi_multiply(...matrixes) {
+                    return matrixes.reduce((previousValue, currentValue) => matrixUtil.multiply(previousValue, currentValue))
+                }
+            }
+
+            // 第一步变换,将红色矩形的点坐标 转换成 黄色矩形坐标系下的坐标
+            function transformMatrixStep1() {
+                // 为了进行旋转变换,首先将 X 轴 Y 轴的单位长度统一
+                const scaleMatrix = matrixUtil.createScaleMatrix(2, 1)
+                // X 轴放大 2倍
+                const scale2Matrix = matrixUtil.createScaleMatrix(2, 1)
+                // 顺时针旋转 0.25 PI
+                const rotationMatrix = matrixUtil.createRotationMatrix(Math.PI * -0.25)
+                // 在 css 属性上平移 (50,0),对于黄色矩形坐标系实际平移(1,0)
+                const translateMatrix = matrixUtil.createTranslateMatrix(1, 0)
+                const step1Matrix = matrixUtil.multi_multiply(translateMatrix, rotationMatrix, scale2Matrix, scaleMatrix)
+                return step1Matrix
+            }
+            // 第二步变换,将 黄色矩形坐标系下的坐标 转换为 页面坐标系下的坐标
+            function transformMatrixStep2() {
+                // 首先将 黄色矩形坐标系的 x 轴 y 轴单位长度和方向与 页面坐标系统一
+                const scaleMatrix = matrixUtil.createScaleMatrix(50, -50)
+                // 然后将黄色矩形坐标系的中心点也页面中心点(页面左上角)统一
+                const translateMatrix = matrixUtil.createTranslateMatrix(300, 250)
+                const step2Matrix = matrixUtil.multi_multiply(translateMatrix, scaleMatrix)
+                return step2Matrix
+            }
+            // 借助 glMatrix 的方法实现矩阵乘法
+            const finalMatrix = matrixUtil.multi_multiply(transformMatrixStep2(), transformMatrixStep1())
+            const points = [[-1, 1], [1, 1], [1, -1], [-1, -1]]
+            return points.map(point => vec2.transformMat3(vec2.create(), point, finalMatrix))
+        }
+
+        // 非矩阵计算坐标的方法
+        // const [ pointAPosition, pointBPosition, pointCPosition, pointDPosition ] = calculatePosition()
+
+        // 矩阵计算坐标的方法
+        const [pointAPosition, pointBPosition, pointCPosition, pointDPosition] = calculatePosition_matrix()
+
+        document.getElementById('circlePointA').style.cssText = `left: ${pointAPosition[0]}px ;top: ${pointAPosition[1]}px;`;
+        document.getElementById('circlePointB').style.cssText = `left: ${pointBPosition[0]}px ;top: ${pointBPosition[1]}px;`;
+        document.getElementById('circlePointC').style.cssText = `left: ${pointCPosition[0]}px ;top: ${pointCPosition[1]}px;`;
+        document.getElementById('circlePointD').style.cssText = `left: ${pointDPosition[0]}px ;top: ${pointDPosition[1]}px;`;
+
+    </script>
+</body>
+
+</html>
