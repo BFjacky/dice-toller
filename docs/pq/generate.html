@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator</title>
+    <script src="http://cnynfe-static.test.upcdn.net/number-gym/echarts.min.js"></script>
+    <script src="http://cnynfe-static.test.upcdn.net/number-gym/html-to-image.js"></script>
+    <style>
+        div {
+            box-sizing: border-box
+        }
+
+        #course-matrixs>.matrix-square {
+            border-radius: 5px;
+            height: 130px;
+            width: 130px;
+            box-shadow: inset-.02rem-.04rem.12rem 0 hsla(0, 0%, 100%, .5);
+
+            &:nth-child(odd) {
+                margin-right: 15px
+            }
+
+            margin-top:15px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center
+        }
+
+        #course-matrixs>.matrix-square>.maintext {
+            font-size: 15px;
+            margin-top: 4px
+        }
+
+        #course-matrixs>.matrix-square>.subtext {
+            font-size: 12px;
+            margin-top: 3px
+        }
+
+        #course-content>.word-container {
+            line-height: 1;
+            font-family: PingFang SC;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            border: 0;
+            vertical-align: baseline;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            position: relative;
+            cursor: default;
+            padding: 10px 10px 10px 10px;
+            border-radius: 32px;
+            margin-top: 10px;
+            justify-content: center;
+            align-items: flex-start;
+            background: radial-gradient(99.19%81.6%at-9.78%-5.82%, #ffc36a 0, #ffaa05 100%);
+            box-shadow: inset-1px-.2px.6px 0 hsla(0, 0%, 100%, .75);
+            width: 100%;
+            height: min-content
+        }
+
+        #course-content>.word-container>.title {
+            font-family: PingFang SC;
+            text-align: center;
+            cursor: default;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            color: #fff;
+            font-weight: 500;
+            line-height: 150%;
+            font-size: 22px;
+            margin-left: 12px;
+            transition: all.3s ease
+        }
+
+        #course-content>.word-container>.subtext-container {
+            margin: 0 auto;
+            margin-top: 5px;
+            font-family: PingFang SC;
+            border-width: 0;
+            text-align: justify;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 14px;
+            background: hsla(0, 0%, 100%, .9);
+            box-sizing: border-box;
+            padding: 25px 18px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-radius: 32px
+        }
+
+        #course-content>.word-container>.subtext-container>.subtext {
+            color: #2e2727;
+            font-family: PingFang SC;
+            cursor: default;
+            text-align: justify;
+            font-weight: 400;
+            line-height: 18px;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 13px;
+            display: flex;
+            word-wrap: break-all;
+            overflow-wrap: break-all;
+            white-space: normal
+        }
+
+        #teacher-sned-word>.word-container {
+            line-height: 1;
+            font-family: PingFang SC;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            border: 0;
+            vertical-align: baseline;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            position: relative;
+            cursor: default;
+            padding: 10px 10px 10px 10px;
+            border-radius: 32px;
+            margin-top: 10px;
+            justify-content: center;
+            align-items: flex-start;
+            background: radial-gradient(120.66%111.02%at 0 0, #ff9129 0, #ff5e2c 100%);
+            box-shadow: inset-1px-.2px.6px 0 hsla(0, 0%, 100%, .75);
+            width: 100%;
+            height: min-content
+        }
+
+        #teacher-sned-word>.word-container>.title {
+            font-family: PingFang SC;
+            text-align: center;
+            cursor: default;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            color: #fff;
+            font-weight: 500;
+            line-height: 150%;
+            font-size: 22px;
+            margin-left: 12px;
+            transition: all.3s ease
+        }
+
+        #teacher-sned-word>.word-container>.subtext-container {
+            margin: 0 auto;
+            margin-top: 5px;
+            font-family: PingFang SC;
+            border-width: 0;
+            text-align: justify;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 14px;
+            background: hsla(0, 0%, 100%, .9);
+            box-sizing: border-box;
+            padding: 25px 18px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-radius: 32px
+        }
+
+        #teacher-sned-word>.word-container>.subtext-container>.subtext {
+            color: #2e2727;
+            font-family: PingFang SC;
+            cursor: default;
+            text-align: justify;
+            font-weight: 400;
+            line-height: 18px;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 13px;
+            display: flex;
+            word-wrap: break-all;
+            overflow-wrap: break-all;
+            white-space: normal
+        }
+    </style>
+</head>
+
+<body style="margin:0;padding: 0;"><!--创建一个图表容器-->
+    <div id="main"
+        style="width: 360px; height: fit-content; border: 1px solid black; background-color: rgb(239, 253, 255);">
+        <div id="report-header"
+            style="background-color:#fa541c;color:#FFFFFFD9;width: 100%;height: 80px; padding: 8px; display: flex; flex-direction: row;justify-content: space-between;">
+            <div>
+                <div style="font-size:11px;">楠博体育</div>
+                <div style="font-size:18px;margin-top: 6px;">网球训练成长档案</div>
+                <div style="font-size:11px; color:#FFFFFFA6;">Tennis Training Growth Record.</div>
+            </div>
+            <div style="display: flex; flex-direction: column; justify-content: center;align-items: flex-end;">
+                <div style="font-size:11px;">张三三</div>
+                <div style="font-size:11px; margin-top:3px;">男</div>
+                <div style="font-size:11px; margin-top:3px;">5岁10个月</div>
+            </div>
+        </div>
+        <div id="physical-radar-content" style="padding: 0px 12px;margin-top:20px;">
+            <div id="physical-radar-title"
+                style="margin-top: 10px;background-color:#fa541c;color:#FFFFFFD9;width: 130px;height: 50px; padding: 5px; display: flex; flex-direction: column;justify-content: space-around;">
+                <span style="font-size:18px;">体能概况</span><span style="font-size: 11px;color:#FFFFFFA6;">Situation of
+                    physique</span>
+            </div>
+            <p style="font-size:12px; color:#000000A6; margin-bottom: 0;">反映了两次课程时各项指标的单项成绩，并且能从雷达图中获得两次成绩的对比。</p>
+            <div id="physical-radar-chart" style="width: calc(360px - 24px); height: 360px;"></div>
+        </div>
+        <div id="course-content" style="margin: 0 auto; width: 95%; margin-top: 20px;">
+            <div class="word-container">
+                <div class="title">课堂收获</div>
+                <div class="subtext-container">
+                    <div class="subtext">本节入门网球课涵盖握拍方式、基本发球与接球技巧，以及正手和反手击球动作训练。学员还将通过趣味练习提高球感和协调性，为后续进阶课程奠定基础。</div>
+                </div>
+            </div>
+        </div>
+        <div id="teacher-sned-word" style="margin: 0 auto; width: 95%; margin-top: 20px;">
+            <div class="word-container">
+                <div class="title">教练寄语</div>
+                <div class="subtext-container">
+                    <div class="subtext">
+                        看到你在最近的比赛中沉着应对，张三三，我对你未来的表现充满信心。你不仅在技术上逐渐成熟，心理素质也得到了很大的提升。虽然你已经展现了出色的潜力，但未来还有很多空间可以继续进步。继续保持这种良好的状态，未来的胜利一定属于你！
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="course-matrix" style="margin-top: 20px;">
+            <div id="course-matrix-content" style="padding: 0px 12px;">
+                <div id="course-matrix-title"
+                    style="margin-top: 10px;background-color:#fa541c;color:#FFFFFFD9;width: 130px;height: 50px; padding: 5px; display: flex; flex-direction: column;justify-content: space-around;">
+                    <span style="font-size:18px;">课程矩阵</span><span style="font-size: 11px;color:#FFFFFFA6;">Curriculum
+                        matrix</span>
+                </div>
+                <p style="font-size:12px; color:#000000A6; margin-bottom: 0;">
+                    网球训练课程分为四个阶段，涵盖从基础到高级的全面训练。初级培养基本动作和球感，中级提升击球技巧和策略，高级注重速度、力量与比赛经验，精英阶段强化体能和战术，帮助学员达到专业水准。</p>
+                <div id="course-matrix-chart" style="width: calc(360px - 24px); height: fit-content;"></div>
+            </div>
+            <div id="course-matrixs"
+                style="display: flex;flex-wrap: wrap;justify-content: center;color:#FFFFFFD9;margin-top:10px;">
+                <div class="matrix-square"
+                    style="background: radial-gradient(124.7% 111.02% at 0 0, #36cfc9 0, #13c2c2 100%);"><span
+                        class="maintext">1.基础阶段</span><span class="subtext">握拍方式</span><span
+                        class="subtext">站位与步伐</span><span class="subtext">基本击球动作</span><span class="subtext">发球技巧</span>
+                </div>
+                <div class="matrix-square"
+                    style="background: radial-gradient(124.7% 111.02% at 0 0, #73d13d 0, #52c41a 100%);"><span
+                        class="maintext">2.中级阶段</span><span class="subtext">移动与击球结合</span><span
+                        class="subtext">站位与步伐</span><span class="subtext">基本击球动作</span><span class="subtext">发球技巧</span>
+                </div>
+                <div class="matrix-square"
+                    style="background: radial-gradient(124.7% 111.02% at 0 0, #ffc53d 0, #faad14 100%);"><span
+                        class="maintext">3.高级阶段</span><span class="subtext">战术训练</span><span
+                        class="subtext">步伐精细化</span><span class="subtext">多球训练</span><span class="subtext">心理素质</span>
+                </div>
+                <div class="matrix-square"
+                    style="background: radial-gradient(124.7% 111.02% at 0 0, #4096ff 0, #1677ff 100%);"><span
+                        class="maintext">4.精英阶段</span><span class="subtext">步伐控制</span><span
+                        class="subtext">力量与柔韧性的结合</span><span class="subtext">挥拍动作</span><span
+                        class="subtext">发球动作的协调性</span></div>
+            </div>
+            <div id="page_tail_qrcode" style="margin-top:60px;">
+                <div style="width: 100%; height:80px; background: #fa541c; display: flex;justify-content: flex-end; position: relative; color:#FFFFFFD9;
+                    background-size: 100% 100%;
+                    background-position: center center;
+                    overflow: visible;
+                    ">
+                    <div style="display: flex; flex-direction: column;justify-content: center;">
+                        <div style="font-size:15px;line-height:15px;">青少年学网球</div>
+                        <div style="font-size:19px; line-height:19px;font-weight: 500; margin-top:8px;">我选楠博体育</div>
+                        <div
+                            style="backgorund-color: rgb(4,52,236); height:10px; border-radius: 5px;font-size:10px;font-height:13px; line-height:13px;margin-top:8px;">
+                            限时39元2节体验课</div>
+                    </div>
+                    <div style="
+                        background-image: url(http://cnynfe-static.test.upcdn.net/number-gym/471728711749_.pic.jpg);
+                         background-size: 100% 100%; background-position: center center;
+                         margin-left: 40px;
+                         width:80px;
+                         height:80px;"></div>
+                    <div style="position:absolute; 
+                                height: 140px;
+                                width: calc(140px * 0.56);
+                                left:20px;
+                                bottom: 0px;
+                                background-image: url(http://cnynfe-static.test.upcdn.net/number-gym/teniesboy.png);
+                                background-size: 100% 100%; background-position: center center;
+                    ">img</div>
+                </div>
+            </div>
+        </div>
+    </div><!--按钮用于生成图片--><button id="capture-btn">保存为图片</button>
+    <script>function initPhysicalRadar() { const myChart = echarts.init(document.getElementById('physical-radar-chart')); const option = { tooltip: { trigger: 'axis' }, legend: { left: 'center', bottom: 0, data: ['2024年10月1日', '2024年10月9日',] }, radar: [{ indicator: [{ text: '速度力量', max: 5 }, { text: '耐力', max: 5 }, { text: '反应灵敏', max: 5 }, { text: '协调平衡', max: 5 }, { text: '爆发力', max: 5 },], center: ['50%', '50%'], radius: 115 },], series: [{ label: { show: true, position: 'top', formatter: function (params) { return params.value } }, type: 'radar', tooltip: { trigger: 'item' }, areaStyle: {}, data: [{ value: [1, 2, 3, 2, 1], name: '2024年10月1日', itemStyle: { color: '#d48806' } }, { value: [2, 2, 3, 3, 3], name: '2024年10月9日', itemStyle: { color: '#ffd666' } },] },] }; myChart.setOption(option) } function initTeacherComment() { } function initCourseMatrix() { } function initWechatQRCode() { } function getCurrentTimestamp() { const now = new Date(); const year = now.getFullYear(); const month = String(now.getMonth() + 1).padStart(2, '0'); const day = String(now.getDate()).padStart(2, '0'); const hours = String(now.getHours()).padStart(2, '0'); const minutes = String(now.getMinutes()).padStart(2, '0'); const seconds = String(now.getSeconds()).padStart(2, '0'); return `${year}-${month}-${day}${hours}:${minutes}:${seconds}` } function main() { initPhysicalRadar()initCourseMatrix()document.getElementById('capture-btn').addEventListener('click', function () { const target = document.getElementById('main'); htmlToImage.toPng(target).then((dataUrl) => { const link = document.createElement('a'); link.href = dataUrl; link.download = `训练报告-${getCurrentTimestamp()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link) }).catch((error) => { console.error('An error occurred:', error) }) }) } main()</script>
+</body>
+
+</html>
